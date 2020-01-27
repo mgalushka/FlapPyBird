@@ -235,6 +235,11 @@ def mainGame(movementInfo):
                     playerVelY = playerFlapAcc
                     playerFlapped = True
                     SOUNDS['wing'].play()
+            if event.type == KEYDOWN and event.key == K_RIGHT:
+                pipeVelX = -6
+
+            if event.type == KEYUP and event.key == K_RIGHT:
+                pipeVelX = -4
 
         # check for crash here
         crashTest = checkCrash({'x': playerx, 'y': playery, 'index': playerIndex},
@@ -287,13 +292,13 @@ def mainGame(movementInfo):
             lPipe['x'] += pipeVelX
 
         # add new pipe when first pipe is about to touch left of screen
-        if 0 < upperPipes[0]['x'] < 5:
+        if len(upperPipes) > 0 and 0 < upperPipes[0]['x'] < 5:
             newPipe = getRandomPipe()
             upperPipes.append(newPipe[0])
             lowerPipes.append(newPipe[1])
 
         # remove first pipe if its out of the screen
-        if upperPipes[0]['x'] < -IMAGES['pipe'][0].get_width():
+        if len(upperPipes) > 0 and upperPipes[0]['x'] < -IMAGES['pipe'][0].get_width():
             upperPipes.pop(0)
             lowerPipes.pop(0)
 
@@ -424,6 +429,7 @@ def showScore(score):
 
 
 def checkCrash(player, upperPipes, lowerPipes):
+    return [False, False]
     """returns True if player collders with base or pipes."""
     pi = player['index']
     player['w'] = IMAGES['player'][0].get_width()
